@@ -40,7 +40,45 @@ def sidebar_navigation():
 @st.cache_data
 def load_data():
     return pd.read_csv('iris.csv')
+    
+from sklearn.linear_model import LogisticRegression 
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
+def prediction_page(data):
+    st.title("Make Predictions")
+
+    # Get user input for flower features
+    sepal_length = st.number_input("Sepal Length (cm)", min_value=0.0) 
+    sepal_width = st.number_input("Sepal Width (cm)", min_value=0.0)
+    petal_length = st.number_input("Petal Length (cm)", min_value=0.0)
+    petal_width = st.number_input("Petal Width (cm)", min_value=0.0)
+
+    # Prepare data for prediction
+    user_input = pd.DataFrame({
+        'sepal_length': [sepal_length],
+        'sepal_width': [sepal_width],
+        'petal_length': [petal_length],
+        'petal_width': [petal_width]
+    })
+
+    # **Example: Basic Prediction Logic (Replace with your actual model)**
+    # 1. Data Preparation
+    X = data[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']]
+    y = data['species']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # 2. Model Training (This is a placeholder, train your actual model)
+    model = LogisticRegression() 
+    model.fit(X_train, y_train)
+
+    # 3. Make Prediction
+    prediction = model.predict(user_input)
+
+    # 4. Display Prediction
+    st.write(f"Predicted Species: {prediction[0]}") 
+
+# ... (rest of the code)
 
 # Display Data Description
 def display_data_description(data):

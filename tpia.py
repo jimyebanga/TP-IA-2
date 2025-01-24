@@ -131,9 +131,6 @@ def machine_learning_models(data):
 def prediction_page(data):
     st.title("Make Predictions")
 
-    # Get user input for flower features
-    sepal_length = st.number_input("Sepal Length (cm)", min
-
 
 # Run the app
 if __name__ == "__main__":

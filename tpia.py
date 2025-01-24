@@ -103,7 +103,7 @@ def main():
 
     # Render selected page
     if st.session_state['page_selection'] == 'about':
-        about_page()
+        st.write("Cette étude, intitulée "Exploration des données des Iris", a été réalisée par Stéphane C. K. Tékouabou. Elle vise à analyser en profondeur l'ensemble de données Iris, un jeu de données classique en apprentissage statistique. À travers des visualisations interactives et des analyses descriptives, cette étude explore les relations entre les différentes caractéristiques des fleurs d'iris et permet de mieux comprendre les différentes espèces.")
     elif st.session_state['page_selection'] == 'Dataset':
         display_data_description(df)
     elif st.session_state['page_selection'] == 'EDA':

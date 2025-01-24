@@ -112,15 +112,27 @@ def main():
     elif st.session_state['page_selection'] == 'Data Cleaning':
         st.title("Data Cleaning and Preprocessing")
         st.write("This section is under development.")
-    elif st.session_state['page_selection'] == 'Machine Learning':
-        st.title("Machine Learning Models")
-        st.write("This section is under development.")
-    elif st.session_state['page_selection'] == 'Prediction':
-        st.title("Make Predictions")
-        st.write("This section is under development.")
     elif st.session_state['page_selection'] == 'Conclusion':
         st.title("Conclusion")
         st.write("This section is under development.")
+        
+        # Machine Learning Model (Placeholder for now)
+def machine_learning_models(data):
+    st.title("Machine Learning Models")
+    st.write("**This section is under development.**")
+
+    # Replace this with your actual model training and prediction logic
+    st.write("A machine learning model is being trained to classify Iris species based on their features.")
+    # Placeholder for model output
+    st.write("Model output will be displayed here.")
+
+
+# Prediction Page
+def prediction_page(data):
+    st.title("Make Predictions")
+
+    # Get user input for flower features
+    sepal_length = st.number_input("Sepal Length (cm)", min
 
 
 # Run the app

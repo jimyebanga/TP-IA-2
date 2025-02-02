@@ -1,75 +1,68 @@
+import streamlit as st
 import pandas as pd
-import numpy as np
+import altair as alt
+import seaborn as sns
+import matplotlib.pyplot as plt  # Importation de matplotlib.pyplot
 
-#read the csv file and store it in the bank data frame
-bank=pd.read_csv('bank-additional.csv',sep=';')
-bank.head(10)
+# Configuration de la page
+st.set_page_config(
+    page_title="Classification des Données Bancaires",
+    page_icon="🏦",  
+    layout="wide", 
+    initial_sidebar_state="expanded"
+)
 
-#list of columns for reference
-bank.columns
+alt.themes.enable("dark")
 
-#  y (response)
-# convert the response to numeric values and store as a new column
-bank['outcome'] = bank.y.map({'no':0, 'yes':1})
+# -------------------------
+# Barre latérale
 
-#import matplotlib
-import matplotlib.pyplot as plt
+if 'page_selection' not in st.session_state:
+    st.session_state.page_selection = 'a_propos'  # Page par défaut
 
-## 1. For age
-# probably not a great feature since lot of outliers
-bank.boxplot(column='age', by='outcome')
+# Fonction pour mettre à jour page_selection
+def set_page_selection(page):
+    st.session_state.page_selection = page
 
-## 2. For job
-## useful features as all values revolve around same space
-bank.groupby('job').outcome.mean()
+with st.sidebar:
+    st.title(' 🏦 Classification des Données Bancaires')
 
-# create job_dummies (we will add it to the bank DataFrame later)
-job_dummies = pd.get_dummies(bank.job, prefix='job')
-job_dummies.drop(job_dummies.columns[0], axis=1, inplace=True)
+    # Navigation par boutons
+    st.subheader("Sections")
+    if st.button("À Propos", use_container_width=True, on_click=set_page_selection, args=('a_propos',)):
+        pass
+    if st.button("Jeu de Données", use_container_width=True, on_click=set_page_selection, args=('jeu_de_donnees',)):
+        pass
+    if st.button("Analyse Exploratoire", use_container_width=True, on_click=set_page_selection, args=('analyse_exploratoire',)):
+        pass
+    if st.button("Nettoyage / Prétraitement des Données", use_container_width=True, on_click=set_page_selection, args=('nettoyage_donnees',)):
+        pass
+    if st.button("Apprentissage Automatique", use_container_width=True, on_click=set_page_selection, args=('apprentissage_automatique',)):
+        pass
+    if st.button("Prédiction", use_container_width=True, on_click=set_page_selection, args=('prediction',)):
+        pass
+    if st.button("Conclusion", use_container_width=True, on_click=set_page_selection, args=('conclusion',)):
+        pass
 
-## 3.default
-# looks like a useful feature
-bank.groupby('default').outcome.mean()
+    # Détails du projet
+    st.subheader("Résumé")
+    st.markdown("""
+        Un tableau de bord interactif pour explorer et classifier les données d'une campagne marketing bancaire.
 
-# so, let's treat this as a 2-class feature rather than a 3-class feature
-bank['default'] = bank.default.map({'no':0, 'unknown':1, 'yes':1})
+        -  [Jeu de Données](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)
+        -  [Notebook Google Colab](https://colab.research.google.com/drive/1KJDBrx3akSPUW42Kbeepj64ZisHFD-NV?usp=sharing)
+        -  [Dépôt GitHub](https://github.com/jimyebanga/bank-additionnal-full/Streamlit-Bank-Classification-Dashboard)
 
-## 4. contact
-# convert the feature to numeric values
-bank['contact'] = bank.contact.map({'cellular':0, 'telephone':1})
+        *Auteur :* [EBANGA MBALLA](https://jcdiamante.com)
+    """)
 
-## 5. month
-# looks like a useful feature at first glance
-bank.groupby('month').outcome.mean()
+# -------------------------
 
-# but, it looks like their success rate is actually just correlated with number of calls
-# thus, the month feature is unlikely to generalize
-bank.groupby('month').outcome.agg(['count', 'mean']).sort_values('count')
+# Charger les données
+try:
+    df = pd.read_csv('bank-additional-full.csv', delimiter=';')
+except FileNotFoundError:
+    st.error("Le fichier 'bank-additional-full.csv' est introuvable. Veuillez vérifier son emplacement.")
+    st.stop()
 
-## 6. duration
-# looks like an excellent feature, but you can't know the duration of a call beforehand, thus it can't be used in your model
-bank.boxplot(column='duration', by='outcome')
-
-## 7.1 previous
-# looks like a useful feature
-bank.groupby('previous').outcome.mean()
-
-## 7.2 poutcome
-# looks like a useful feature
-bank.groupby('poutcome').outcome.mean()
-
-# create poutcome_dummies
-poutcome_dummies = pd.get_dummies(bank.poutcome, prefix='poutcome')
-poutcome_dummies.drop(poutcome_dummies.columns[0], axis=1, inplace=True)
-# concatenate bank DataFrame with job_dummies and poutcome_dummies
-bank = pd.concat([bank, job_dummies, poutcome_dummies], axis=1)
-
-# prepare a boxplot on euribor3m by outcome, and comment on the 'euribor3m' feature
-# looks like an excellent feature
-bank.boxplot(column='euribor3m', by='outcome')
-
-feature_cols = ['default', 'contact', 'previous', 'euribor3m'] + list(bank.columns[-13:])
-X = bank[feature_cols]
-# create y
-y = bank.outcome
-X.head()
+            st.error(f"Une erreur est survenue : {e}")

@@ -51,9 +51,9 @@ with st.sidebar:
 
         -  [Jeu de Données](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)
         -  [Notebook Google Colab](https://colab.research.google.com/drive/1KJDBrx3akSPUW42Kbeepj64ZisHFD-NV?usp=sharing)
-        -  [Dépôt GitHub](https://github.com/teguegni/bank-additionnal-full/Streamlit-Bank-Classification-Dashboard)
+        -  [Dépôt GitHub](https://github.com/jimyebanga/bank-additionnal-full/Streamlit-Bank-Classification-Dashboard)
 
-        **Auteur :** [`Kenfack Teguegni Junior`](https://jcdiamante.com)
+        **Auteur :** ['jimyebanga`](https://jcdiamante.com)
     """)
 
 # -------------------------

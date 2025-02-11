@@ -7,115 +7,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score 
-import streamlit as st
-import pandas as pd
-import altair as alt
-import seaborn as sns
-import matplotlib.pyplot as plt
-import base64
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score 
-import streamlit as st  
-
-# Initialiser l'attribut si ce n'est pas déjà fait  
-if 'page_selection' not in st.session_state:  
-    st.session_state.page_selection = 'valeur_par_defaut'  # Remplacez par la valeur souhaitée
-# Configuration de l'image de fond
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read()).decode()
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url(data:image/png;base64,{encoded_string});
-            background-size: cover;
-            background-opacity: 0.1;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-# Appliquer l'image de fond (remplacer 'background.jpg' par votre fichier)
-alt.themes.enable("dark")
-
-# -------------------------
-# Barre latérale (identique)
-
-# ... [Le code de la barre latérale reste inchangé] ...
-
-# -------------------------
-
-# Charger les données
-try:
-    df = pd.read_csv('bank-additional-full.csv', delimiter=';')
-except Exception as e:
-    st.error(f"Une erreur est survenue : {e}")
-    st.stop()
-    add_bg_from_url("https://cdn.pixabay.com/photo/2017/10/31/19/05/bank-2906640_1280.jpg")
-# -------------------------
-# Section interactive des graphiques
-
-if st.session_state.page_selection == 'jeu_de_donnees':
-    st.title("📊 Exploration Interactive des Données")
-    
-    # Contrôles interactifs
-    with st.expander("Options de Visualisation"):
-        col1, col2 = st.columns(2)
-        with col1:
-            selected_x = st.selectbox("Axe X", df.select_dtypes(include=['number']).columns)
-        with col2:
-            selected_y = st.selectbox("Axe Y", df.select_dtypes(include=['number']).columns)
-            
-        plot_type = st.radio("Type de graphique", ["Nuage de points", "Histogramme", "Boxplot"])
-    
-    # Création dynamique des graphiques
-    if plot_type == "Nuage de points":
-        brush = alt.selection_interval()
-        chart = alt.Chart(df).mark_circle(size=60).encode(
-            x=selected_x,
-            y=selected_y,
-            color=alt.condition(brush, 'y', alt.value('lightgray')),
-            tooltip=list(df.columns)
-        ).add_selection(brush).interactive()
-        
-        st.altair_chart(chart, use_container_width=True)
-        
-    elif plot_type == "Histogramme":
-        chart = alt.Chart(df).mark_bar().encode(
-            alt.X(selected_x, bin=True),
-            y='count()',
-            color='y',
-            tooltip=['count()']
-        ).interactive()
-        st.altair_chart(chart, use_container_width=True)
-        
-    elif plot_type == "Boxplot":
-        chart = alt.Chart(df).mark_boxplot().encode(
-            x='y:N',
-            y=selected_y,
-            color='y'
-        ).interactive()
-        st.altair_chart(chart, use_container_width=True)
-    
-    # Section de filtrage dynamique
-    with st.expander("Filtres Dynamiques"):
-        age_range = st.slider("Filtrer par âge", 
-                             min_value=int(df['age'].min()), 
-                             max_value=int(df['age'].max()), 
-                             value=(20, 80))
-        
-        filtered_df = df[(df['age'] >= age_range[0]) & (df['age'] <= age_range[1])]
-        
-        st.write(f"Nombre de clients filtrés : {len(filtered_df)}")
-        st.altair_chart(alt.Chart(filtered_df).mark_bar().encode(
-            x='job:N',
-            y='count()',
-            color='y'
-        ).interactive(), use_container_width=True)
-
-# ... [Le reste des pages reste inchangé] ...
 
 # Configuration de la page
 st.set_page_config(
@@ -160,9 +51,9 @@ with st.sidebar:
 
         -  [Jeu de Données](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)
         -  [Notebook Google Colab](https://colab.research.google.com/drive/1KJDBrx3akSPUW42Kbeepj64ZisHFD-NV?usp=sharing)
-        -  [Dépôt GitHub](https://github.com/teguegni/bank-additionnal-full/Streamlit-Bank-Classification-Dashboard)
+        -  [Dépôt GitHub](https://github.com/jimyebanga/TP-IA-2/edit/main/bank%20add.py#L1C22)
 
-        *Auteur :* [Kenfack Teguegni Junior](https://jcdiamante.com)
+        **Auteur :** [`EBANGA MBALLA`](https://jcdiamante.com)
     """)
 
 # -------------------------
@@ -177,26 +68,26 @@ except FileNotFoundError:
 # Page principale
 if st.session_state.page_selection == 'a_propos':
     # Page À Propos
-    st.title(" À Propos")
+    st.title("️ À Propos")
     st.markdown("""
-        Cette application explore le jeu de données *Bank Marketing* et propose :
+        Cette application explore le jeu de données **Bank Marketing** et propose :
 
         - Une exploration visuelle des données.
         - Un prétraitement et nettoyage des données.
         - La construction et l'évaluation de modèles d'apprentissage automatique.
         - Une interface interactive pour prédire si un client souscrira à un produit.
 
-        *Technologies utilisées :*
+        **Technologies utilisées :**
         - Python (Streamlit, Altair, Pandas)
         - Machine Learning (Scikit-learn)
 
-        *Auteur : Kenfack Teguegni Junior*
+        **Auteur : EBANGA MBALLA**
 
-        ✉ Contact : kenfackteguegni@gmail.com
+        ✉️ Contact : Jimyebanga5@gmail.com
     """)
 elif st.session_state.page_selection == 'conclusion':
      # Page À Propos
-    st.title(" conclusion")
+    st.title("️ conclusion")
     st.markdown("""
         Un traitement minutieux et réfléchi du DataFrame bank-additional-full est fondamental pour maximiser la précision 
         et la fiabilité du modèle de prédiction. En combinant explorations, prétraitements adéquats, et évaluations rigoureuses,
@@ -368,7 +259,7 @@ elif st.session_state.page_selection == 'prediction':
             
             prediction = model.predict([[age, duration, campaign]])  
             subscription_status = "Oui" if prediction[0] == 'yes' else "Non"  
-            st.success(f"Le client va-t-il souscrire au produit ? : *{subscription_status}*") 
+            st.success(f"Le client va-t-il souscrire au produit ? : **{subscription_status}**") 
             # Prédictions  
             y_pred = model.predict(X_test)  
 
